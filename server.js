@@ -9,7 +9,7 @@ restberry
     })
     .use('express')
     .use('mongoose', function(odm) {
-        odm.connect('mongodb://psiops-whats_for_dinner_api-2410520:27017'); // Replace host and port with env.variables
+        odm.connect('mongodb://process.env.IP:process.env.PORT');
     })
     .listen();
 
