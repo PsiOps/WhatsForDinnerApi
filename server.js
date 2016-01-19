@@ -1,46 +1,36 @@
-var restberry = require('restberry');
+var express = require("express");
+var app = express();
+var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
 
-restberry
-    .config({
-        apiPath: '/api/v1',
-        env: 'prod',
-        name: 'WEATHER APP',
-        port: process.env.PORT,
-    })
-    .use('express')
-    .use('mongoose', function(odm) {
-        odm.connect('mongodb://process.env.IP:process.env.PORT');
-    })
-    .listen();
+// Models
+var Recipe = require("./app/models/recipe")
 
-restberry.model('City')
-    .schema({
-        name: {type: String, required: true},
-        location: {
-            longitude: {type: Number},
-            latitude: {type: Number},
-        },
-    })
-    .routes
-        .addCreateRoute()  // POST /api/v1/cities
-        .addReadRoute();  // GET /api/v1/cities/:id
+mongoose.connect("psiops-whats_for_dinner_service-2414574:27017"); 
 
-var CONDITIONS = [
-    'Cloudy',
-    'Rainy',
-    'Sunny',
-];
-restberry.model('Weather')
-    .schema({
-        city: {type: restberry.odm.ObjectId, ref: 'City', required: true},
-        date: {type: Date, default: Date.now},
-        tempature: {type: Number, required: true},
-        condition: {type: String, enum: CONDITIONS, required: true},
-    })
-    .routes
-        .addCreateRoute({  // POST /api/v1/cities/:id/weathers
-            parentModel: 'City',
-        })
-        .addReadManyRoute({  // GET /api/v1/cities/:id/weathers
-            parentModel: 'City',
-        });
+// configure app to use bodyParser()
+// this will let us get the data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var port = process.env.PORT || 8080;        // set our port
+
+// all of our routes will be prefixed with /api
+app.use('/api', router);
+
+var router = express.Router();              // get an instance of the express Router
+
+// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+router.get('/', function(req, res) {
+    res.json({ message: 'hooray! welcome to our api!' });   
+});
+
+router.route("/recipes")
+    .post(function(res, req){
+        
+        var recipe = new 
+    });
+
+
+app.listen(port);
+console.log('Magic happens on port ' + port);
