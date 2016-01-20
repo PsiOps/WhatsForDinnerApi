@@ -3,15 +3,17 @@ var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
-// TODO: require a config.js (gitignore) which stores db settings 
+var config = require("./config.js")
+
+// TODO: Create deploy routine to droplet
+// TODO: Move routes to their own files, best practice
+// TODO: Implement token based authentication
 // TODO: Add swagger stuff to this api
-// TODO: Find out how to add authentication to this api
-// TODO: Move routes to their own files, like in swagger generated server code
 
 // Models
 var Recipe = require("./app/models/recipe")
 
-mongoose.connect("psiops-whats_for_dinner_service-2414574:27017"); 
+mongoose.connect(config.db.host + ":27017"); 
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -51,7 +53,7 @@ router.route("/recipes")
                 
             res.json({message: "Recipe created!"})
         })
-    });
+    })
 
     .get(function(req, res) {
         Recipe.find(function(err, recipes) {
