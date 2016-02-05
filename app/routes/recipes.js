@@ -8,7 +8,7 @@ module.exports = function(router){
         var recipe = new Recipe();
         
         console.log("Got Post Request");
-        console.log(JSON.stringify(req));
+        console.log(JSON.stringify(req.body));
         console.log(req.body.name);
         console.log(req.body.description);
         
