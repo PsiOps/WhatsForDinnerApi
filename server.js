@@ -2,8 +2,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
-// Note: using staging server url, remove .testing() for production
-var lex = require('letsencrypt-express').testing();
+var createServer = require("auto-sni");
 
 // Start the app
 var app = express();
@@ -21,9 +20,6 @@ mongoose.connect(config.db.host + ":27017");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// set our port
-var port = process.env.PORT || 8080;
-
 // Add routes
 var router = require("./app/routes/routes.js")
 
@@ -31,9 +27,16 @@ var router = require("./app/routes/routes.js")
 app.use('/api', router);
 
 // Start listening
-//app.listen(port);
-lex.create(app).listen([80], [443, 5001], function () {
-  console.log("ENCRYPT __ALL__ THE DOMAINS!");
-});
+createServer({
+	email: psiopssoftware@gmail.com, // Emailed when certificates expire. 
+	agreeTos: true, // Required for letsencrypt. 
+	debug: true, // Add console messages and uses staging LetsEncrypt server. (Disable in production) 
+	domains: ["lemmingsontour.nl", "(dev|staging|production).lemmingsontour.nl"], // Optional list of allowed domains (uses pathtoregexp) 
+	forceSSL: true, // Make this false to disable auto http->https redirects (default true). 
+	ports: {
+		http: 80, // Optionally override the default http port. 
+		https: 443 // // Optionally override the default https port. 
+	}, app);
 
-console.log('Magic happens on port ' + port);
+
+console.log('Magic happens');
