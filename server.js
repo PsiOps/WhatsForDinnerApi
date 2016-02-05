@@ -28,15 +28,15 @@ app.use('/api', router);
 
 // Start listening
 createServer({
-	email: psiopssoftware@gmail.com, // Emailed when certificates expire. 
+	email: "psiopssoftware@gmail.com", // Emailed when certificates expire. 
 	agreeTos: true, // Required for letsencrypt. 
 	debug: true, // Add console messages and uses staging LetsEncrypt server. (Disable in production) 
-	domains: ["lemmingsontour.nl", "(dev|staging|production).lemmingsontour.nl"], // Optional list of allowed domains (uses pathtoregexp) 
+	domains: ["lemmingsontour.nl"], // Optional list of allowed domains (uses pathtoregexp) 
 	forceSSL: true, // Make this false to disable auto http->https redirects (default true). 
 	ports: {
 		http: 80, // Optionally override the default http port. 
 		https: 443 // // Optionally override the default https port. 
-	}, app);
+	}}, app);
 
 
 console.log('Magic happens');
