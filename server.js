@@ -1,6 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var cors = require("cors");
 
 var createServer = require("auto-sni");
 
@@ -19,6 +20,7 @@ mongoose.connect(config.db.host + ":27017");
 // configure app to use bodyParser. This will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 
 // Add routes
 var router = require("./app/routes/routes.js")
