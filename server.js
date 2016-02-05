@@ -2,6 +2,9 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
+// Note: using staging server url, remove .testing() for production
+var lex = require('letsencrypt-express').testing();
+
 // Start the app
 var app = express();
 
@@ -28,5 +31,9 @@ var router = require("./app/routes/routes.js")
 app.use('/api', router);
 
 // Start listening
-app.listen(port);
+//app.listen(port);
+lex.create(app).listen([80], [443, 5001], function () {
+  console.log("ENCRYPT __ALL__ THE DOMAINS!");
+});
+
 console.log('Magic happens on port ' + port);
