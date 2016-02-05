@@ -11,9 +11,6 @@ var app = express();
 // Load configuration
 var config = require("./config.js")
 
-// TODO: Implement token based authentication
-// TODO: Add swagger stuff to this api
-
 // Connect to db
 mongoose.connect(config.db.host + ":27017"); 
 
