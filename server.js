@@ -36,8 +36,8 @@ createServer({
 	domains: ["lemmingsontour.nl"], // Optional list of allowed domains (uses pathtoregexp) 
 	forceSSL: true, // Make this false to disable auto http->https redirects (default true). 
 	ports: {
-		http: 80, // Optionally override the default http port. 
-		https: 443 // // Optionally override the default https port. 
+		http: 3001, // Optionally override the default http port (80). 
+		https: 3002 // // Optionally override the default https port (443). 
 	}}, app);
 
 
