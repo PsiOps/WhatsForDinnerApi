@@ -7,7 +7,13 @@ module.exports = function(router){
         
         var recipe = new Recipe();
         
+        console.log("Got Post Request");
+        console.log(JSON.stringify(req));
+        console.log(req.body.name);
+        console.log(req.body.description);
+        
         recipe.name = req.body.name;
+        recipe.description = req.body.description;
         
         recipe.save(function(err){
             if(err){
