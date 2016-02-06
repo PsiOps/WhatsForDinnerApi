@@ -47,6 +47,13 @@ module.exports = function(router){
     
   
     .put(function(req, res) {
+        
+        console.log("Got PUT Request");
+        console.log(JSON.stringify(req.body));
+        console.log(req.params.recipe_id);
+        console.log(req.body.name);
+        console.log(req.body.description);
+        
         Recipe.findById(req.params.recipe_id, function(err, recipe){
             
             if (err){
