@@ -6,12 +6,7 @@ module.exports = function(router){
     .post(function(req, res){
         
         var recipe = new Recipe();
-        
-        console.log("Got Post Request");
-        console.log(JSON.stringify(req.body));
-        console.log(req.body.name);
-        console.log(req.body.description);
-        
+
         recipe.name = req.body.name;
         recipe.description = req.body.description;
         
@@ -45,14 +40,7 @@ module.exports = function(router){
         });
     })
     
-  
     .put(function(req, res) {
-        
-        console.log("Got PUT Request");
-        console.log(JSON.stringify(req.body));
-        console.log(req.params.recipe_id);
-        console.log(req.body.name);
-        console.log(req.body.description);
         
         Recipe.findById(req.params.recipe_id, function(err, recipe){
             
@@ -70,6 +58,19 @@ module.exports = function(router){
 
                 res.json({ message: 'Recipe updated!' });
             });
+        });
+    })
+    
+    .delete(function(req, res){
+        
+        Recipe.remove({
+            _id: req.params.recipe_id
+        }, function(err, recipe){
+            if(err){
+                res.send(err);
+            }
+            
+            res.json({ message: 'Successfully deleted' })
         });
     });
 };
