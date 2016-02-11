@@ -8,7 +8,7 @@ module.exports = function(router){
             
             ScheduleDay
                 .find()
-                .populate('recipe', 'name _id')
+                .populate('recipe', 'name')
                 .exec(function(err, scheduleDays) {
                     if (err){
                         res.send(err);
