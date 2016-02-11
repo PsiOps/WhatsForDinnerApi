@@ -1,6 +1,6 @@
 module.exports = function(router){
     
-    var ScheduleDay = require("../models/scheduleDays");
+    var ScheduleDay = require("../models/scheduleDay");
     var Recipe = require("../models/recipe");
     
     router.route("/scheduledays")

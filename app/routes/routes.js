@@ -14,5 +14,6 @@ router.get('/', function(req, res) {
 });
 
 require("./recipes")(router);
+require("./scheduleDays")(router);
 
 module.exports = router;
