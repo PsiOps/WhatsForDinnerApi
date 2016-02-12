@@ -1,10 +1,11 @@
 {
-    "name": "WhatsForDinner",
-    "main": "server.js",
-    "dependencies": {
-        "express": "~4.13.3",
-        "mongoose": "~4.3.5",
-        "body-parser": "~1.14.2",
-        "auto-sni": "~0.8.1"
-    }
+  "name": "WhatsForDinner",
+  "main": "server.js",
+  "dependencies": {
+    "auto-sni": "~0.8.1",
+    "body-parser": "~1.14.2",
+    "express": "~4.13.3",
+    "moment": "^2.11.2",
+    "mongoose": "~4.3.5"
+  }
 }
