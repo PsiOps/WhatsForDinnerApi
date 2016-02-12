@@ -42,12 +42,12 @@ module.exports = function(router){
                     }
         
                     var schedule = [];
-                    var day = from;
+                    var day = fromDay;
                     var i = 0;
                     
-                    while(!day.isSame(upTo)){
+                    while(!day.isSame(upToDay)){
                         
-                        var scheduleDay = moment(scheduleDays[i].day)
+                        var scheduleDay = moment(scheduleDays[i].day).startOf('day');
 
                         if(day.isBefore(scheduleDay)){
                            
