@@ -24,8 +24,11 @@ module.exports = function(router){
     router.route("/scheduledays")
         .get(function(req, res) {
             
-            var from = moment(req.query.from).startOf('day');
-            var upTo = moment(req.query.upto).startOf('day');
+            var from = req.query.from;
+            var upTo = req.query.upto;
+            
+            var fromDay = moment(from).startOf('day');
+            var upToDay = moment(upTo).startOf('day');
             
             var dayQuery = getDayQuery(from, upTo);
             
