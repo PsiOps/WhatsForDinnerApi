@@ -1,3 +1,20 @@
+var getDayQuery = function(from, upTo){
+    
+    if(from && upTo){
+        return {'day' :  {"$gte": from, "$lt": upTo} };
+    }
+    
+    if(from && !upTo){
+        return {'day' :  {"$gte": from} };
+    }
+    
+    if(!from && upTo){
+        return {'day' :  {"$lt": upTo} };
+    }
+    
+    return {}
+}
+
 module.exports = function(router){
     
     var ScheduleDay = require("../models/scheduleDay");
@@ -6,8 +23,13 @@ module.exports = function(router){
     router.route("/scheduledays")
         .get(function(req, res) {
             
+            var from = req.query.from;
+            var upTo = req.query.upto;
+            
+            var dayQuery = getDayQuery(from, upTo);
+            
             ScheduleDay
-                .find()
+                .find(dayQuery)
                 .populate('recipe', 'name')
                 .exec(function(err, scheduleDays) {
                     if (err){
