@@ -42,6 +42,4 @@ createServer({
 		https: config.ports.https // // Optionally override the default https port (443). 
 	}}, app);
 
-//app.listen(8080); This works in Cloud9
-
 console.log('Magic happens');
