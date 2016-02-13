@@ -18,7 +18,6 @@ var getDayQuery = function(from, upTo){
 module.exports = function(router){
     
     var ScheduleDay = require("../models/scheduleDay");
-    //var Recipe = require("../models/recipe");
     var moment = require('moment');
     
     router.route("/scheduledays")

@@ -35,12 +35,13 @@ createServer({
 	email: "psiopssoftware@gmail.com", // Emailed when certificates expire. 
 	agreeTos: true, // Required for letsencrypt. 
 	debug: true, // Add console messages and uses staging LetsEncrypt server. (Disable in production) 
-	domains: ["lemmingsontour.nl"], // Optional list of allowed domains (uses pathtoregexp) 
-	forceSSL: true, // Make this false to disable auto http->https redirects (default true). 
+	domains: [config.domain], // Optional list of allowed domains (uses pathtoregexp) 
+	forceSSL: config.forceSSL, // Make this false to disable auto http->https redirects (default true). 
 	ports: {
-		http: 3001, // Optionally override the default http port (80). 
-		https: 3002 // // Optionally override the default https port (443). 
+		http: config.ports.http, // Optionally override the default http port (80). 
+		https: config.ports.https // // Optionally override the default https port (443). 
 	}}, app);
 
+//app.listen(8080); This works in Cloud9
 
 console.log('Magic happens');
