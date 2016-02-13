@@ -48,7 +48,7 @@ module.exports = function(router){
     var getSchedule = function(fromDay, upToDay, scheduleDays){
         
         var schedule = [];
-        var day = fromDay;
+        var currentDay = fromDay;
         var i = 0;
         
         do{
@@ -59,13 +59,12 @@ module.exports = function(router){
             // get the start of day moment for the scheduleDay
             var scheduleDayMoment = moment(scheduleDayDate).startOf('day');
             
-            // if the day is before the schedule day
-            if(day.isBefore(scheduleDayMoment)){
+            if(currentDay.isBefore(scheduleDayMoment)){
                 
-                schedule.push(getEmptyDay(day.toDate()));
+                schedule.push(getEmptyDay(currentDay.toDate()));
                 
-                // Add a day to the day
-                day.add(1, 'day');
+                // Add a day to the current day
+                currentDay.add(1, 'day');
                 
                 // and try again
                 continue;
@@ -76,14 +75,15 @@ module.exports = function(router){
             
             i++;
             
+            // TODO: This can be handled more elegantly without adding the model
             if(scheduleDays.length == i){
                 // Add a fake dbmodel with a day beyond the upto day to the array
                 scheduleDays.push(getEmptyDay(upToDay.add(1, 'day').toDate()));
             }
             
-            day.add(1, 'day');
+            currentDay.add(1, 'day');
             
-        } while(!day.isSame(upToDay))
+        } while(!currentDay.isSame(upToDay))
         
         return schedule;
     }
