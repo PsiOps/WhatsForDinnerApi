@@ -1,92 +1,10 @@
 module.exports = function(router){
     
-    var ScheduleDay = require("../models/scheduleDay");
     var moment = require('moment');
     
-    var getDayQuery = function(from, upTo){
-        
-        if(from && upTo){
-            return {'day' :  {"$gte": from, "$lt": upTo} };
-        }
-        
-        if(from && !upTo){
-            return {'day' :  {"$gte": from} };
-        }
-        
-        if(!from && upTo){
-            return {'day' :  {"$lt": upTo} };
-        }
-        
-        return {}
-    }
-    
-    var getEmptyDay = function(date){
-        
-        var emptyDay = new ScheduleDay();
-                                
-        emptyDay.day = new Date(date);
-        
-        return emptyDay;
-    }
-    
-    var getEmptySchedule = function(fromDay, upToDay){
-    
-        var schedule = [];
-        
-        var day = fromDay;
-        
-        do{
-            schedule.push(getEmptyDay(day.toDate()));
-            
-           day.add(1, 'day');
-            
-        } while(!day.isSame(upToDay))
-        
-        return schedule;
-    }
-    
-    var getSchedule = function(fromDay, upToDay, scheduleDays){
-        
-        var schedule = [];
-        var currentDay = fromDay;
-        var i = 0;
-        
-        do{
-            var scheduleDay = scheduleDays[i];
-            
-            var scheduleDayDate = new Date(scheduleDay.day);
-            
-            // get the start of day moment for the scheduleDay
-            var scheduleDayMoment = moment(scheduleDayDate).startOf('day');
-            
-            if(currentDay.isBefore(scheduleDayMoment)){
-                
-                schedule.push(getEmptyDay(currentDay.toDate()));
-                
-                // Add a day to the current day
-                currentDay.add(1, 'day');
-                
-                // and try again
-                continue;
-            }
-            
-            // Add the db model to the schedule
-            schedule.push(scheduleDay)
-            
-            i++;
-            
-            // TODO: This can be handled more elegantly without adding the model
-            if(scheduleDays.length == i){
-                // Add a fake dbmodel with a day beyond the upto day to the array
-                scheduleDays.push(getEmptyDay(upToDay.add(1, 'day').toDate()));
-            }
-            
-            currentDay.add(1, 'day');
-            
-        } while(!currentDay.isSame(upToDay))
-        
-        return schedule;
-    }
+    var ScheduleDay = require("../models/scheduleDay");
+    var dayQueryFactory = require('../services/dayQueryFactory');
+    var scheduleFactory = require('../services/scheduleFactory');
     
     router.route("/scheduledays")
         .get(function(req, res) {
@@ -97,7 +15,7 @@ module.exports = function(router){
             var fromDay = moment(from).startOf('day');
             var upToDay = moment(upTo).startOf('day');
             
-            var dayQuery = getDayQuery(from, upTo);
+            var dayQuery = dayQueryFactory.create(from, upTo);
             
             ScheduleDay
                 .find(dayQuery)
@@ -109,11 +27,11 @@ module.exports = function(router){
                     }
         
                     if(scheduleDays.length == 0){
-                        res.json(getEmptySchedule(fromDay, upToDay));
+                        res.json(scheduleFactory.createEmpty(fromDay, upToDay));
                         return;
                     }
         
-                    res.json(getSchedule(fromDay, upToDay, scheduleDays));
+                    res.json(scheduleFactory.create(fromDay, upToDay, scheduleDays));
                 });
         })
         .post(function(req, res){
@@ -130,6 +48,39 @@ module.exports = function(router){
                 }
                     
                 res.json(scheduleDay);
+            });
+        })
+    router.route("/scheduledays/:scheduleday_id")
+        .put(function(req, res){
+            ScheduleDay.findById(req.params.scheduleday_id, function(err, scheduleDay){
+               
+                if (err){
+                    res.send(err);
+                }
+                
+                scheduleDay.recipeId = req.body.recipeId;
+                scheduleDay.recipe = req.body.recipeId;
+                
+                scheduleDay.save(function(err){
+                    
+                    if (err){
+                        res.send(err);
+                    }
+                    
+                    res.json({ message: 'Schedule Day updated!' });
+                });
+            });
+        })
+        .delete(function(req, res){
+            
+            ScheduleDay.remove({
+                _id: req.params.scheduleday_id
+            }, function(err, scheduleDay){
+                if(err){
+                    res.send(err);
+                }
+                
+                res.json({ message: 'Successfully deleted' })
             });
         });
 };

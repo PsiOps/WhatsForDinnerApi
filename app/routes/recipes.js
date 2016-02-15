@@ -20,6 +20,9 @@ module.exports = function(router){
     })
 
     .get(function(req, res) {
+        
+        console.log("Finding all Recipes");
+        
         Recipe.find(function(err, recipes) {
             if (err){
                 res.send(err);
@@ -27,10 +30,13 @@ module.exports = function(router){
 
             res.json(recipes);
         });
-    });
+    })
 
   router.route("/recipes/:recipe_id")
     .get(function(req, res){
+        
+        console.log("Finding specific Recipe");
+        
         Recipe.findById(req.params.recipe_id, function(err, recipe){
             if (err){
                 res.send(err);
