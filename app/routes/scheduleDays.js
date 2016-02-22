@@ -9,8 +9,8 @@ module.exports = function(router){
     router.route("/scheduledays")
         .get(function(req, res) {
             
-            var from = new Date(req.query.from);
-            var upTo = new Date(req.query.upto);
+            var from = new Date(+req.query.from);
+            var upTo = new Date(+req.query.upto);
             
             var fromDay = moment(from).startOf('day');
             var upToDay = moment(upTo).startOf('day');
@@ -31,35 +31,29 @@ module.exports = function(router){
                         return;
                     }
         
+                    scheduleDays.forEach(day => console.log(JSON.stringify(day)));
+        
                     res.json(scheduleFactory.create(fromDay, upToDay, scheduleDays));
                 });
         })
-        .post(function(req, res){
-            
-            var scheduleDay = new ScheduleDay();
-            
-            scheduleDay.day = req.body.day;
-            scheduleDay.recipe = req.body.recipeId;
-            scheduleDay.recipeId = req.body.recipeId;
-            
-            scheduleDay.save(function(err){
-                if(err){
-                    res.send(err);
-                }
-                    
-                res.json(scheduleDay);
-            });
-        })
-    router.route("/scheduledays/:scheduleday_id")
+    router.route("/scheduledays/:date")
         .put(function(req, res){
-            ScheduleDay.findById(req.params.scheduleday_id, function(err, scheduleDay){
-               
+            
+            var searchDate = moment(new Date(+req.params.date)).startOf('day');
+            
+\            ScheduleDay.findOne({'day' : searchDate}, function(err, scheduleDay){
+                
                 if (err){
                     res.send(err);
                 }
                 
+                if(!scheduleDay){
+                    scheduleDay = new ScheduleDay();
+                }
+                    
                 scheduleDay.recipeId = req.body.recipeId;
                 scheduleDay.recipe = req.body.recipeId;
+                scheduleDay.day = searchDate;
                 
                 scheduleDay.save(function(err){
                     
@@ -67,15 +61,15 @@ module.exports = function(router){
                         res.send(err);
                     }
                     
-                    res.json({ message: 'Schedule Day updated!' });
+                    res.json({ message: 'Schedule Day put!' });
                 });
             });
         })
         .delete(function(req, res){
             
-            ScheduleDay.remove({
-                _id: req.params.scheduleday_id
-            }, function(err, scheduleDay){
+            var searchDate = moment(new Date(+req.params.date)).startOf('day');
+
+            ScheduleDay.remove({ 'day': searchDate }, function(err, scheduleDay){
                 if(err){
                     res.send(err);
                 }

@@ -43,6 +43,8 @@ module.exports = {
             
         } while(!currentDay.isSame(upToDay))
         
+        schedule.forEach(day => console.log(JSON.stringify(day)));
+        
         return schedule;
     },
     
