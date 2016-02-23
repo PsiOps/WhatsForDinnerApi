@@ -3,8 +3,7 @@ var schema = mongoose.Schema;
 
 var scheduleDaySchema = new schema({
     day: Date,
-    recipeId: String,
-    recipe: {type: String, ref: 'Recipe'}
+    recipe: {type: schema.Types.ObjectId, ref: 'Recipe'}
 });
 
 module.exports = mongoose.model("ScheduleDay", scheduleDaySchema);

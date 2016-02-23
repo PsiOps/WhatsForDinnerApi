@@ -15,5 +15,6 @@ router.get('/', function(req, res) {
 
 require("./recipes")(router);
 require("./scheduleDays")(router);
+require("./ingredients")(router);
 
 module.exports = router;

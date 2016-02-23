@@ -1,5 +1,7 @@
 module.exports = function(router){
     
+    var mongoose = require("mongoose");
+
     var moment = require('moment');
     
     var ScheduleDay = require("../models/scheduleDay");
@@ -19,7 +21,7 @@ module.exports = function(router){
             
             ScheduleDay
                 .find(dayQuery)
-                .populate('recipe', 'name')
+                .populate('recipe', '_id name')
                 .exec(function(err, scheduleDays) {
                     
                     if (err){
@@ -31,8 +33,6 @@ module.exports = function(router){
                         return;
                     }
         
-                    scheduleDays.forEach(day => console.log(JSON.stringify(day)));
-        
                     res.json(scheduleFactory.create(fromDay, upToDay, scheduleDays));
                 });
         })
@@ -41,7 +41,7 @@ module.exports = function(router){
             
             var searchDate = moment(new Date(+req.params.date)).startOf('day');
             
-\            ScheduleDay.findOne({'day' : searchDate}, function(err, scheduleDay){
+            ScheduleDay.findOne({'day' : searchDate}, function(err, scheduleDay){
                 
                 if (err){
                     res.send(err);
@@ -50,10 +50,12 @@ module.exports = function(router){
                 if(!scheduleDay){
                     scheduleDay = new ScheduleDay();
                 }
-                    
-                scheduleDay.recipeId = req.body.recipeId;
-                scheduleDay.recipe = req.body.recipeId;
+                
+                scheduleDay.recipe = mongoose.Types.ObjectId(req.body.recipeId);
                 scheduleDay.day = searchDate;
+                
+                console.log(scheduleDay.recipe);
+                console.log(scheduleDay.day);
                 
                 scheduleDay.save(function(err){
                     

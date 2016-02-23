@@ -23,14 +23,18 @@ module.exports = function(router){
         
         console.log("Finding all Recipes");
         
-        Recipe.find(function(err, recipes) {
-            if (err){
-                res.send(err);
-            }
+        Recipe
+            .find()
+            .populate('ingredients')
+            .exec(function(err, recipes)
+            {
+                if (err){
+                    res.send(err);
+                }
 
-            res.json(recipes);
-        });
-    })
+                res.json(recipes);
+            });
+        })
 
   router.route("/recipes/:recipe_id")
     .get(function(req, res){
