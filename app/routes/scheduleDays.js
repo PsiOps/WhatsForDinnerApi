@@ -54,9 +54,6 @@ module.exports = function(router){
                 scheduleDay.recipe = mongoose.Types.ObjectId(req.body.recipeId);
                 scheduleDay.day = searchDate;
                 
-                console.log(scheduleDay.recipe);
-                console.log(scheduleDay.day);
-                
                 scheduleDay.save(function(err){
                     
                     if (err){
